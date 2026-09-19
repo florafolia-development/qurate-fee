@@ -32,3 +32,20 @@ export function validateToken(token: string | null): {
   // All token validation now happens server-side
   return { valid: false, error: 'Client-side validation deprecated' };
 }
+
+/**
+ * Whether the `?dev=true` bypass may skip token validation.
+ *
+ * The parameter alone is not enough. It used to be, which meant anyone who
+ * guessed it reached the calculator and the firm's fee schedule without a
+ * token in production. The bypass now requires a development build as well,
+ * so every deployed build needs a real token.
+ *
+ * Pure, and exported, so the rule can be tested rather than trusted.
+ */
+export function devBypassAllowed(
+  devParam: string | null,
+  isDevBuild: boolean,
+): boolean {
+  return isDevBuild && devParam === 'true';
+}

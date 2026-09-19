@@ -1,0 +1,30 @@
+# Secret scanning configuration.
+#
+# The allowlist is a register, not a mute button. Every entry names a finding
+# that was inspected and found not to be a live secret, and says how that was
+# established. A finding nobody has inspected does not belong here.
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "supabase-service-role-key"
+description = "Supabase service_role key or claim. Full database access, bypasses RLS."
+regex = '''service_role'''
+tags = ["supabase", "critical"]
+
+[allowlist]
+description = "Inspected findings"
+paths = [
+  '''\.gitleaks\.toml$''',
+]
+commits = [
+  # A `TOKEN_SECRET` constant in src/lib/tokenUtils.ts, committed 27 January
+  # 2026 and since removed from the working tree. Calculator token validation
+  # now runs in the QVOS backend and nothing in this repo references the
+  # constant. The value is still reachable in history, so it should be treated
+  # as burned and rotated wherever it was used, but there is nothing left here
+  # to fix and rewriting published history would break every clone.
+  "7176e2c85878a00ef7dadc94f731c3ba007f5416",
+  "17900090b3ecd397d924ee0c724c1fd27eefe6e3",
+]
