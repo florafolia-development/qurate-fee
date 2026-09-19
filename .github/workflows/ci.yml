@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+  # On demand, because a pull request opened through the API does not always
+  # raise the event that starts this workflow, and a branch with no run has no
+  # way to get one.
+  workflow_dispatch:
+
+jobs:
+  gate:
+    name: Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # `npm ci` rather than `npm install`, because it installs exactly what
+      # the lockfile says and fails when the lockfile and package.json
+      # disagree. That disagreement is what left `dev` unbuildable: jspdf was
+      # in both manifest and lockfile, but its dependency tree was not, so a
+      # clean install pruned it and the build could not resolve the import.
+      - run: npm ci
+      - run: npm run gate

@@ -1,0 +1,8 @@
+{
+  "_comment": "Files still carrying the superseded palette (2E3D49 navy, C19131 gold). The brand is Navy 2B3D4B, Gold CA8D05, Cream D9D2BE. This list is a debt register, not an exemption policy: it should only ever get shorter, and correcting the palette is a separate change with Richard's sign-off because it is a visible change to a client-facing product.",
+  "hex_exempt": [
+    "src/index.css",
+    "index.html",
+    "vite.config.ts"
+  ]
+}

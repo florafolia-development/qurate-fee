@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript incremental build state
+*.tsbuildinfo
+
+# Personal Claude Code overrides. Shared settings live in .claude/settings.json.
+.claude/settings.local.json
+
+# Never commit environment files. Commit .env.example instead.
+.env
+.env.*
+!.env.example

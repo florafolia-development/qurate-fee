@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTokenValidation } from '@/hooks/useTokenValidation';
 import { calculateFees, formatCurrency, parseCurrencyInput, FEE_TIERS, getMonthlyRetainer, MIN_RETAINER_MONTHS, MAX_RETAINER_MONTHS, REBATE_EV_THRESHOLD } from '@/lib/feeCalculations';
+import { devBypassAllowed } from '@/lib/tokenUtils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,9 +22,16 @@ export default function Calculator() {
   const [enterpriseValue, setEnterpriseValue] = useState(0);
   const [retainerMonths, setRetainerMonths] = useState(MIN_RETAINER_MONTHS);
 
-  // Get token and dev mode from URL
+  // Get token and dev mode from URL.
+  //
+  // The dev bypass is gated on the build mode, not on the query string alone.
+  // `?dev=true` on its own used to skip token validation in every build, so
+  // anyone who guessed the parameter reached the calculator and the firm's
+  // fee schedule without a token, which left the gate decorative. A deployed
+  // build, preview included, now always requires a real token; generate one
+  // with the QVOS `create-calculator-token` function.
   const token = searchParams.get('token');
-  const devMode = searchParams.get('dev') === 'true';
+  const devMode = devBypassAllowed(searchParams.get('dev'), import.meta.env.DEV);
 
   // Validate token using the API hook
   const { isLoading, isValid, error: tokenError, recipient } = useTokenValidation(token, devMode);

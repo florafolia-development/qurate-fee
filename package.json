@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc -b",
+    "gate": "npm run typecheck && npm run lint && npm test && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",
