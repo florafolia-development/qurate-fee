@@ -3,15 +3,18 @@
 # The allowlist is a register, not a mute button. Every entry names a finding
 # that was inspected and found not to be a live secret, and says how that was
 # established. A finding nobody has inspected does not belong here.
+#
+# A note on the obvious missing rule: there is no custom pattern for
+# `service_role`. One was written and removed. A Supabase service_role key is
+# a JWT, so the default `jwt` rule already catches it wherever it appears, and
+# matching the literal string instead flags every `GRANT ... TO service_role`
+# in a migration and every `Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')` in a
+# function. That is false positives and no true ones, which is how a scanner
+# gets ignored.
 
 [extend]
 useDefault = true
 
-[[rules]]
-id = "supabase-service-role-key"
-description = "Supabase service_role key or claim. Full database access, bypasses RLS."
-regex = '''service_role'''
-tags = ["supabase", "critical"]
 
 [allowlist]
 description = "Inspected findings"
@@ -27,4 +30,5 @@ commits = [
   # to fix and rewriting published history would break every clone.
   "7176e2c85878a00ef7dadc94f731c3ba007f5416",
   "17900090b3ecd397d924ee0c724c1fd27eefe6e3",
+  "4b5f5528821f5568407b2640d15ecb6edcd7d53b",
 ]

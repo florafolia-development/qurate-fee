@@ -37,14 +37,10 @@ jobs:
         run: gitleaks dir . --redact --no-banner --verbose
 
       - name: Scan the history
-        run: gitleaks git . --redact --no-banner
+        run: gitleaks git . --redact --no-banner --verbose
 
-  dependencies:
-    name: Dependency review
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
+# A dependency review job belongs here, and cannot run yet:
+# actions/dependency-review-action needs the repository's Dependency graph
+# switched on, under Settings, Advanced Security. The same setting turns on
+# Dependabot security alerts, so it is worth having either way. Add the job
+# back once it is enabled.
