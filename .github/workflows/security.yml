@@ -37,7 +37,7 @@ jobs:
         run: gitleaks dir . --redact --no-banner --verbose
 
       - name: Scan the history
-        run: gitleaks git . --redact --no-banner
+        run: gitleaks git . --redact --no-banner --verbose
 
 # A dependency review job belongs here, and cannot run yet:
 # actions/dependency-review-action needs the repository's Dependency graph
